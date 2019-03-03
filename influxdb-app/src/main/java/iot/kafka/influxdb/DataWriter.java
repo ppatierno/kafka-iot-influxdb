@@ -76,7 +76,7 @@ public class DataWriter extends AbstractVerticle {
 
             JsonObject json = new JsonObject(record.value());
 
-            Point point = Point.measurement("device-data")
+            Point point = Point.measurement(this.config.measurement())
                     .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                     .addField("temperature", json.getInteger("temperature"))
                     .addField("humidity", json.getInteger("humidity"))

@@ -7,22 +7,26 @@ public class DataWriterConfig {
     private static final String DEFAULT_BOOTSTRAP_SERVERS = "localhost:9092";
     private static final String DEFAULT_DATABASE_URL = "http://localhost:8086";
     private static final String DEFAULT_DATABASE = "sensor";
+    private static final String DEFAULT_MEASUREMENT = "device-data";
     private static final String DEFAULT_TOPIC_DEVICE_DATA = "iot-device-data";
 
     private static final String BOOTSTRAP_SERVERS = "BOOTSTRAP_SERVERS";
     private static final String DATABASE_URL = "DATABASE_URL";
     private static final String DATABASE = "DATABASE";
+    private static final String MEASUREMENT = "MEASUREMENT";
     private static final String TOPIC_DEVICE_DATA = "TOPIC_DEVICE_DATA";
 
     private final String bootstrapServers;
     private final String databaseUrl;
     private final String database;
+    private final String measurement;
     private final String topicDeviceData;
 
-    public DataWriterConfig(String bootstrapServers, String databaseUrl, String database, String topicDeviceData) {
+    public DataWriterConfig(String bootstrapServers, String databaseUrl, String database, String measurement, String topicDeviceData) {
         this.bootstrapServers = bootstrapServers;
         this.databaseUrl = databaseUrl;
         this.database = database;
+        this.measurement = measurement;
         this.topicDeviceData = topicDeviceData;
     }
 
@@ -37,9 +41,10 @@ public class DataWriterConfig {
         String bootstrapServers = map.getOrDefault(DataWriterConfig.BOOTSTRAP_SERVERS, DEFAULT_BOOTSTRAP_SERVERS);
         String databaseUrl = map.getOrDefault(DataWriterConfig.DATABASE_URL, DEFAULT_DATABASE_URL);
         String database = map.getOrDefault(DataWriterConfig.DATABASE, DEFAULT_DATABASE);
+        String measurement = map.getOrDefault(DataWriterConfig.MEASUREMENT, DEFAULT_MEASUREMENT);
         String topicDeviceData = map.getOrDefault(DataWriterConfig.TOPIC_DEVICE_DATA, DEFAULT_TOPIC_DEVICE_DATA);
 
-        return new DataWriterConfig(bootstrapServers, databaseUrl, database, topicDeviceData);
+        return new DataWriterConfig(bootstrapServers, databaseUrl, database, measurement, topicDeviceData);
     }
 
     public String bootstrapServers() {
@@ -54,6 +59,10 @@ public class DataWriterConfig {
         return this.database;
     }
 
+    public String measurement() {
+        return this.measurement;
+    }
+
     public String topicTemperature() {
         return this.topicDeviceData;
     }
@@ -64,6 +73,7 @@ public class DataWriterConfig {
                 "bootstrapServers=" + bootstrapServers +
                 "databaseUrl=" + databaseUrl +
                 "database=" + database +
+                "measurement=" + measurement +
                 "topicDeviceData=" + topicDeviceData +
                 ")";
     }
