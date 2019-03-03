@@ -1,4 +1,4 @@
-package iot.kafka.sensors;
+package iot.kafka.devices.sensors;
 
 /**
  * Interface for sensors providing temperature value

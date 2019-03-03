@@ -1,11 +1,11 @@
-package iot.kafka;
+package iot.kafka.devices;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
-import iot.kafka.sensors.impl.DHT22;
+import iot.kafka.devices.sensors.impl.DHT22;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;

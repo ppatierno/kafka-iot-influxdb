@@ -1,4 +1,4 @@
-package iot.kafka;
+package iot.kafka.devices;
 
 import java.util.Map;
 

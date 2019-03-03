@@ -1,4 +1,4 @@
-package iot.kafka.sensors;
+package iot.kafka.devices.sensors;
 
 
 import java.util.Properties;

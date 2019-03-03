@@ -1,7 +1,7 @@
-package iot.kafka.sensors.impl;
+package iot.kafka.devices.sensors.impl;
 
-import iot.kafka.sensors.HumiditySensor;
-import iot.kafka.sensors.TemperatureSensor;
+import iot.kafka.devices.sensors.HumiditySensor;
+import iot.kafka.devices.sensors.TemperatureSensor;
 
 import java.util.Properties;
 import java.util.Random;
