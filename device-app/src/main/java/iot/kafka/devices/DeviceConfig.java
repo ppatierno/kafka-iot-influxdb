@@ -5,11 +5,11 @@ import java.util.Map;
 public class DeviceConfig {
 
     private static final String DEFAULT_BOOTSTRAP_SERVERS = "localhost:9092";
-    private static final int DEFAULT_DELAY = 1000;
-    private static final int DEFAULT_MIN_TEMPERATURE = 15;
+    private static final int DEFAULT_DELAY = 5000;
+    private static final int DEFAULT_MIN_TEMPERATURE = 20;
     private static final int DEFAULT_MAX_TEMPERATURE = 25;
     private static final int DEFAULT_MIN_HUMIDITY = 50;
-    private static final int DEFAULT_MAX_HUMIDITY = 60;
+    private static final int DEFAULT_MAX_HUMIDITY = 55;
     private static final String DEFAULT_TOPIC_DEVICE_DATA = "iot-device-data";
 
     private static final String BOOTSTRAP_SERVERS = "BOOTSTRAP_SERVERS";
