@@ -1,4 +1,6 @@
-# kafka-iot-influxdb
+# Kafka IoT InfluxDB
+
+![Overview](images/overview.png "Overview")
 
 ## InfluxDB
 
