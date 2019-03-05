@@ -78,6 +78,7 @@ public class DataWriter extends AbstractVerticle {
 
             Point point = Point.measurement(this.config.measurement())
                     .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                    .tag("deviceid", record.key())
                     .addField("temperature", json.getInteger("temperature"))
                     .addField("humidity", json.getInteger("humidity"))
                     .build();
