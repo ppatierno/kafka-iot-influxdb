@@ -1,0 +1,63 @@
+package iot.kafka.influxdb;
+
+import org.apache.camel.CamelContext;
+import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.kafka.KafkaConstants;
+import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.impl.SimpleRegistry;
+import org.apache.camel.model.dataformat.JsonLibrary;
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.Point;
+
+import java.util.concurrent.TimeUnit;
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+
+        DataWriterConfig config = DataWriterConfig.fromMap(System.getenv());
+
+        InfluxDB influxDB = InfluxDBFactory.connect(config.databaseUrl());
+
+        SimpleRegistry registry = new SimpleRegistry();
+        registry.put("connectionBean", influxDB);
+        CamelContext camelContext = new DefaultCamelContext(registry);
+
+        camelContext.addRoutes(new RouteBuilder() {
+
+            @Override
+            public void configure() throws Exception {
+
+                from("kafka:" + config.topicDeviceData() + "?brokers=" + config.bootstrapServers())
+                .unmarshal().json(JsonLibrary.Jackson, DeviceData.class)
+                .process(new Processor() {
+                    @Override
+                    public void process(Exchange exchange) throws Exception {
+
+                        String deviceId = exchange.getIn().getHeader(KafkaConstants.KEY).toString();
+                        DeviceData deviceData = (DeviceData) exchange.getIn().getBody();
+
+                        Point point = Point.measurement(config.measurement())
+                                .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                                .tag("deviceid", deviceId)
+                                .addField("temperature", deviceData.getTemperature())
+                                .addField("humidity", deviceData.getHumidity())
+                                .build();
+
+                        exchange.getOut().setBody(point);
+                    }
+                })
+                .to("influxdb://connectionBean?databaseName=" + config.database() + "&retentionPolicy=autogen")
+                .routeId("kafka-influxdb-route")
+                .log("${body}");
+            }
+        });
+
+        camelContext.start();
+
+        Thread.sleep(Long.MAX_VALUE);
+    }
+}
