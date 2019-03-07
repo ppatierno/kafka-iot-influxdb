@@ -43,7 +43,7 @@ Using database sensor
 For querying data on the `device-data` measurement (table).
 
 ```
-SELECT "temperature", "humidity" FROM "device-data"
+SELECT "deviceid", "temperature", "humidity" FROM "device-data"
 ```
 
 ## Grafana

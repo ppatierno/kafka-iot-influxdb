@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: device-app
+  labels:
+    app: iot-demo
+spec:
+  selector:
+    matchLabels:
+      app: device-app
+  template:
+    metadata:
+      labels:
+        app: device-app
+    spec:
+      containers:
+      - name: device-app
+        image: docker.io/ppatierno/device-app:latest
+        env:
+        - name: BOOTSTRAP_SERVERS
+          value: "my-cluster-kafka-bootstrap:9092"
+        - name: TOPIC_DEVICE_DATA
+          value: "iot-device-data"
+        - name: DELAY
+          value: "1000"
+        - name: MIN_TEMPERATURE
+          value: "20"
+        - name: MAX_TEMPERATURE
+          value: "25"
+        - name: MIN_HUMIDITY
+          value: "50"
+        - name: MAX_HUMIDITY
+          value: "55"
