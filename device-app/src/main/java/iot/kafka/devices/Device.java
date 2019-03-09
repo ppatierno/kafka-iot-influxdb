@@ -6,6 +6,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import iot.kafka.devices.sensors.impl.DHT22;
+import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
@@ -89,7 +90,36 @@ public class Device extends AbstractVerticle {
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.ACKS_CONFIG, "1");
 
+        if (this.config.trustStorePath() != null && this.config.trustStorePassword() != null) {
+            config.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
+            config.put("ssl.truststore.type", "PKCS12");
+            config.put("ssl.truststore.location", this.config.trustStorePath());
+            config.put("ssl.truststore.password", this.config.trustStorePassword());
+        }
+
+        if (this.config.keyStorePath() != null && this.config.keyStorePassword() != null) {
+            config.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
+            config.put("ssl.keystore.type", "PKCS12");
+            config.put("ssl.keystore.location", this.config.keyStorePath());
+            config.put("ssl.keystore.password", this.config.keyStorePassword());
+        }
+
+        if (this.config.username() != null && this.config.password() != null) {
+            config.put("sasl.mechanism","SCRAM-SHA-512");
+            config.put("sasl.jaas.config", "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"" + this.config.username() + "\" password=\"" + this.config.password() + "\";");
+
+            if (config.get(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG) != null &&
+                config.get(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG).equals("SSL"))  {
+                config.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG,"SASL_SSL");
+            } else {
+                config.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG,"SASL_PLAINTEXT");
+            }
+        }
+
         KafkaProducer<K, V> producer = KafkaProducer.create(this.vertx, config);
+        producer.exceptionHandler(ex -> {
+           log.error("Producer exception", ex);
+        });
 
         return producer;
     }

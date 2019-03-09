@@ -19,6 +19,12 @@ public class DeviceConfig {
     private static final String MIN_HUMIDITY = "MIN_HUMIDITY";
     private static final String MAX_HUMIDITY = "MAX_HUMIDITY";
     private static final String TOPIC_DEVICE_DATA = "TOPIC_DEVICE_DATA";
+    private static final String TRUSTSTORE_PATH = "TRUSTSTORE_PATH";
+    private static final String TRUSTSTORE_PASSWORD = "TRUSTSTORE_PASSWORD";
+    private static final String KEYSTORE_PATH = "KEYSTORE_PATH";
+    private static final String KEYSTORE_PASSWORD = "KEYSTORE_PASSWORD";
+    private static final String USERNAME = "USERNAME";
+    private static final String PASSWORD = "PASSWORD";
 
     private final String bootstrapServers;
     private final long delay;
@@ -27,11 +33,20 @@ public class DeviceConfig {
     private final int minHumidity;
     private final int maxHumidity;
     private final String topicDeviceData;
+    private final String trustStorePassword;
+    private final String trustStorePath;
+    private final String keyStorePassword;
+    private final String keyStorePath;
+    private final String username;
+    private final String password;
 
     public DeviceConfig(String bootstrapServers, long delay,
                         int minTemperature, int maxTemperature,
                         int minHumidity, int maxHumidity,
-                        String topicDeviceData) {
+                        String topicDeviceData,
+                        String trustStorePath, String trustStorePassword,
+                        String keyStorePath, String keyStorePassword,
+                        String username, String password) {
         this.bootstrapServers = bootstrapServers;
         this.delay = delay;
         this.minTemperature = minTemperature;
@@ -39,6 +54,12 @@ public class DeviceConfig {
         this.minHumidity = minHumidity;
         this.maxHumidity = maxHumidity;
         this.topicDeviceData = topicDeviceData;
+        this.trustStorePath = trustStorePath;
+        this.trustStorePassword = trustStorePassword;
+        this.keyStorePath = keyStorePath;
+        this.keyStorePassword = keyStorePassword;
+        this.username = username;
+        this.password = password;
     }
 
     /**
@@ -56,8 +77,15 @@ public class DeviceConfig {
         int minHumidity = Integer.parseInt(map.getOrDefault(DeviceConfig.MIN_HUMIDITY, String.valueOf(DEFAULT_MIN_HUMIDITY)));
         int maxHumidity = Integer.parseInt(map.getOrDefault(DeviceConfig.MAX_HUMIDITY, String.valueOf(DEFAULT_MAX_HUMIDITY)));
         String topicDeviceData = map.getOrDefault(DeviceConfig.TOPIC_DEVICE_DATA, DEFAULT_TOPIC_DEVICE_DATA);
+        String trustStorePath = map.getOrDefault(DeviceConfig.TRUSTSTORE_PATH, null);
+        String trustStorePassword = map.getOrDefault(DeviceConfig.TRUSTSTORE_PASSWORD, null);
+        String keyStorePath = map.getOrDefault(DeviceConfig.KEYSTORE_PATH, null);
+        String keyStorePassword = map.getOrDefault(DeviceConfig.KEYSTORE_PASSWORD, null);
+        String username = map.getOrDefault(DeviceConfig.USERNAME, null);
+        String password = map.getOrDefault(DeviceConfig.PASSWORD, null);
 
-        return new DeviceConfig(bootstrapServers, delay, minTemperature, maxTemperature, minHumidity, maxHumidity, topicDeviceData);
+        return new DeviceConfig(bootstrapServers, delay, minTemperature, maxTemperature, minHumidity, maxHumidity, topicDeviceData,
+                                trustStorePath, trustStorePassword, keyStorePath, keyStorePassword, username, password);
     }
 
     public String bootstrapServers() {
@@ -88,16 +116,46 @@ public class DeviceConfig {
         return this.topicDeviceData;
     }
 
+    public String trustStorePath() {
+        return this.trustStorePath;
+    }
+
+    public String trustStorePassword() {
+        return this.trustStorePassword;
+    }
+
+    public String keyStorePath() {
+        return this.keyStorePath;
+    }
+
+    public String keyStorePassword() {
+        return this.keyStorePassword;
+    }
+
+    public String username() {
+        return this.username;
+    }
+
+    public String password() {
+        return this.password;
+    }
+
     @Override
     public String toString() {
         return "DeviceConfig(" +
                 "bootstrapServers=" + bootstrapServers +
-                "delay=" + delay +
-                "minTemperature=" + minTemperature +
-                "maxTemperature=" + maxTemperature +
-                "minHumidity=" + minHumidity +
-                "maxHumidity=" + maxHumidity +
-                "topicDeviceData=" + topicDeviceData +
+                ",delay=" + delay +
+                ",minTemperature=" + minTemperature +
+                ",maxTemperature=" + maxTemperature +
+                ",minHumidity=" + minHumidity +
+                ",maxHumidity=" + maxHumidity +
+                ",topicDeviceData=" + topicDeviceData +
+                ",trustStorePath=" + trustStorePath +
+                ",trustStorePassword=" + trustStorePassword +
+                ",keyStorePath=" + keyStorePath +
+                ",keyStorePassword=" + keyStorePassword +
+                ",username=" + username + 
+                ",password=" + password +
                 ")";
     }
 }
