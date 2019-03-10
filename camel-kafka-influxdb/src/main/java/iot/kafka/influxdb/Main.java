@@ -31,7 +31,20 @@ public class Main {
             @Override
             public void configure() throws Exception {
 
-                from("kafka:" + config.topicDeviceData() + "?brokers=" + config.bootstrapServers())
+                String kafkaConfig = "kafka:" + config.topicDeviceData() + "?brokers=" + config.bootstrapServers() + "&groupId=" + config.consumerGroup();
+
+
+                if (config.username() != null && config.password() != null) {
+
+                    String saslJaasConfig = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
+                    String auth = "saslMechanism=SCRAM-SHA-512" +
+                            "&securityProtocol=SASL_PLAINTEXT" +
+                            "&saslJaasConfig=" + String.format(saslJaasConfig, config.username(), config.password());
+
+                    kafkaConfig += "&" + auth;
+                }
+
+                from(kafkaConfig)
                 .unmarshal().json(JsonLibrary.Jackson, DeviceData.class)
                 .process(new Processor() {
                     @Override
