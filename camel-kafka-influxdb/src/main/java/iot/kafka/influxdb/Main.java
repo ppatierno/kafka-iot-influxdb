@@ -11,6 +11,7 @@ import org.apache.camel.model.dataformat.JsonLibrary;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Point;
+import org.influxdb.dto.Query;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +22,7 @@ public class Main {
         DataWriterConfig config = DataWriterConfig.fromMap(System.getenv());
 
         InfluxDB influxDB = InfluxDBFactory.connect(config.databaseUrl());
+        influxDB.query(new Query("CREATE DATABASE " + config.database(), config.database()));
 
         SimpleRegistry registry = new SimpleRegistry();
         registry.put("connectionBean", influxDB);

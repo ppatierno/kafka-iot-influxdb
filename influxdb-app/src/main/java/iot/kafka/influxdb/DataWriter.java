@@ -10,6 +10,7 @@ import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Pong;
+import org.influxdb.dto.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,6 +63,7 @@ public class DataWriter extends AbstractVerticle {
 
     private void consume() {
 
+        this.influxDB.query(new Query("CREATE DATABASE " + this.config.database(), this.config.database()));
         this.influxDB.setDatabase(this.config.database());
 
         Properties config = new Properties();
