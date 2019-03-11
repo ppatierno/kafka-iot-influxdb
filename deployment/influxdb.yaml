@@ -39,6 +39,7 @@ spec:
   selector:
     app: influxdb
   ports:
-  - port: 8086
+  - name: api
+    port: 8086
     targetPort: api
 
